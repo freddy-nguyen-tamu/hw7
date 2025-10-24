@@ -1,40 +1,7 @@
 import heapq
 from math import inf
 
-def dijkstra(node, edges, origin):
-    adjacent_list = {}
-    for i in range(1, node + 1):
-        adjacent_list[i] = []
-    for a, b, c in edges:
-        adjacent_list[a].append((b, c))
-        adjacent_list[b].append((a, c))
-    distance = {}
-    previous = {}
-    for i in range(1, node + 1):
-        distance[i] = inf
-        previous[i] = None
-    distance[origin] = 0
-    priority_queue = [(0, origin)]
-    while priority_queue:
-        current_distance, u = heapq.heappop(priority_queue)
-        if current_distance > distance[u]:
-            continue
-        for v, weight in adjacent_list[u]:
-            new_distance = current_distance + weight
-            if new_distance < distance[v]:
-                distance[v] = new_distance
-                previous[v] = u
-                heapq.heappush(priority_queue, (new_distance, v))
-    return distance, previous   
-def backtrack(previous, destination):
-    path = []
-    current = destination
-    while current is not None:
-        path.append(current)
-        current = previous[current]
-    path.reverse()
-    return path
-if __name__ == "__main__":
+def main():
     n = 36
     edges = [
         (1, 11, 1), (1, 2, 1), (11, 10, 1), (12, 11, 2), 
@@ -47,9 +14,39 @@ if __name__ == "__main__":
         (9, 10, 1), (3, 21, 1), (4, 21, 1), (13, 16, 1), 
         (16, 15, 1), (10, 18, 2), (14, 16, 1), (14, 20, 1)
     ]
+
+    adjacent_list = {i: [] for i in range(1, n + 1)}
+    for a, b, c in edges:
+        adjacent_list[a].append((b, c))
+        adjacent_list[b].append((a, c))
+
+    distance = {i: inf for i in range(1, n + 1)}
+    previous = {i: None for i in range(1, n + 1)}
+
     current_node = 1
-    a, b = dijkstra(n, edges, current_node)
+    distance[current_node] = 0
+    priority_queue = [(0, current_node)]
+
+    while priority_queue:
+        current_distance, u = heapq.heappop(priority_queue)
+        if current_distance > distance[u]:
+            continue
+        for v, weight in adjacent_list[u]:
+            new_distance = current_distance + weight
+            if new_distance < distance[v]:
+                distance[v] = new_distance
+                previous[v] = u
+                heapq.heappush(priority_queue, (new_distance, v))
+
     print("Shortest distances from node", current_node)
-    for node in [6,8,9,15,16,22]:
-        path = backtrack(b, node)
-        print(f"Node {node}: Distance = {a[node]}, Path = {path}")
+    for node in [6, 8, 9, 15, 16, 22]:
+        path = []
+        current = node
+        while current is not None:
+            path.append(current)
+            current = previous[current]
+        path.reverse()
+        print(f"Node {node}: Distance = {distance[node]}, Path = {path}")
+
+if __name__ == "__main__":
+    main()
