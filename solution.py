@@ -50,6 +50,6 @@ if __name__ == "__main__":
     current_node = 1
     a, b = dijkstra(n, edges, current_node)
     print("Shortest distances from node", current_node)
-    for node in range(1, n+1):
+    for node in [6,8,9,15,16,22]:
         path = backtrack(b, node)
         print(f"Node {node}: Distance = {a[node]}, Path = {path}")
