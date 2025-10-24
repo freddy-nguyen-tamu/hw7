@@ -1,5 +1,4 @@
 import heapq
-from math import inf
 
 def main():
     n = 36
@@ -20,7 +19,7 @@ def main():
         adjacent_list[a].append((b, c))
         adjacent_list[b].append((a, c))
 
-    distance = {i: inf for i in range(1, n + 1)}
+    distance = {i: 9999999999999999 for i in range(1, n + 1)}
     previous = {i: None for i in range(1, n + 1)}
 
     current_node = 1
